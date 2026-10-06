@@ -78,21 +78,20 @@ export class ThreeBackground implements OnInit {
     this.particles = new T.Points(geo, mat);
     this.scene.add(this.particles);
 
-    // Ícone de pulmões girando no plano de fundo
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 24 24" fill="none" stroke="#c9933a" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v8"/><path d="M12 11c0 4-2 4-4 6-1.4 1.4-3 1-3-1 0-3 1-5 2-7"/><path d="M12 11c0 4 2 4 4 6 1.4 1.4 3 1 3-1 0-3-1-5-2-7"/></svg>`;
+    // Pulmão (icon.svg) girando e pulsando no plano de fundo
     const img = new Image();
     img.onload = () => {
       const c = document.createElement('canvas');
-      c.width = 512;
-      c.height = 512;
-      c.getContext('2d')!.drawImage(img, 0, 0, 512, 512);
+      c.width = 1024;
+      c.height = 1024;
+      c.getContext('2d')!.drawImage(img, 0, 0, 1024, 1024);
       const tex = new T.CanvasTexture(c);
       const plane = new T.Mesh(
-        new T.PlaneGeometry(26, 26),
+        new T.PlaneGeometry(26, 26 * (303.75 / 358.5)),
         new T.MeshBasicMaterial({
           map: tex,
           transparent: true,
-          opacity: 0.12,
+          opacity: 0.14,
           depthWrite: false,
           blending: T.AdditiveBlending,
         }),
@@ -101,7 +100,7 @@ export class ThreeBackground implements OnInit {
       this.lungPlane = plane;
       this.scene?.add(plane);
     };
-    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    img.src = 'icons/icon.svg';
 
     const ringMat = new T.LineBasicMaterial({
       color: 0xc16738,
@@ -134,6 +133,10 @@ export class ThreeBackground implements OnInit {
     }
     if (this.lungPlane) {
       this.lungPlane.rotation.z = t * 0.15;
+      // pulso em 3 frames, mesma cadência do icon-animated.svg (1.2s)
+      const phase = (Date.now() % 1200) / 1200;
+      const pulse = 1 + 0.12 * (0.5 - 0.5 * Math.cos(phase * Math.PI * 2));
+      this.lungPlane.scale.setScalar(pulse);
     }
     this.renderer.render(this.scene, this.camera);
   }
