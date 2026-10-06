@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 358.5 303.75" width="260" height="220">
+  <g transform="translate(179.25,151.875)">
+    <g>
+      <animateTransform attributeName="transform" type="scale" values="1;1.12;1" keyTimes="0;0.5;1" dur="1.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
+      <animate attributeName="opacity" values="1;0.55;1" keyTimes="0;0.5;1" dur="1.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1"/>
+      <use href="icon.svg" x="-179.25" y="-151.875"/>
+    </g>
+  </g>
+</svg>
