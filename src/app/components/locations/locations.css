@@ -1,0 +1,41 @@
+/* Drop-down das localizações: altura animada via grid-template-rows (0fr → 1fr) */
+.loc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.loc-panel.is-open {
+  grid-template-rows: 1fr;
+}
+
+.loc-panel__inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.loc-panel__content {
+  opacity: 0;
+  transform: translateY(-12px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.loc-panel.is-open .loc-panel__content {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+.loc-chevron {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loc-panel,
+  .loc-panel__content,
+  .loc-chevron {
+    transition: none;
+  }
+}

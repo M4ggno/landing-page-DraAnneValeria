@@ -16,7 +16,8 @@
           type="button"
           (click)="toggle(i)"
           [attr.aria-expanded]="openIndex() === i"
-          class="w-full flex items-center justify-between gap-6 py-5 text-left"
+          [attr.aria-controls]="'loc-panel-' + i"
+          class="group w-full flex items-center justify-between gap-6 py-5 text-left"
         >
           <div>
             <p class="font-serif text-[1.15rem] font-normal">{{ loc.city }} — {{ loc.state }}</p>
@@ -25,43 +26,50 @@
           <svg
             width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             aria-hidden="true"
-            class="shrink-0 text-gold transition-transform duration-300"
+            class="loc-chevron shrink-0 text-gold"
             [class.rotate-180]="openIndex() === i"
           >
             <path d="m6 9 6 6 6-6"/>
           </svg>
         </button>
 
-        @if (openIndex() === i) {
-          <div class="pb-7">
-            <div class="rounded-[14px] border border-gold/20 bg-white/[0.03] p-3">
-              @if (mapsEmbed(loc.query); as embed) {
-                <iframe
-                  [src]="embed"
-                  [title]="'Mapa de ' + loc.clinic"
-                  class="w-full h-64 rounded-[10px] border-0"
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  allowfullscreen
-                ></iframe>
-              }
-              <div class="flex items-center justify-between mt-3 px-1">
-                <p class="font-sans text-[0.75rem] text-stone">{{ loc.clinic }}</p>
-                @if (mapsHref(loc.query); as url) {
-                  <a
-                    [href]="url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1.5 font-sans text-[0.78rem] text-gold transition hover:text-gold-light"
-                  >
-                    Abrir localização
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </a>
+        <div
+          [id]="'loc-panel-' + i"
+          class="loc-panel"
+          [class.is-open]="openIndex() === i"
+          [attr.inert]="openIndex() === i ? null : ''"
+        >
+          <div class="loc-panel__inner">
+            <div class="loc-panel__content pb-7">
+              <div class="rounded-[14px] border border-gold/20 bg-white/[0.03] p-3">
+                @if (visited().has(i) && mapsEmbed(loc.query); as embed) {
+                  <iframe
+                    [src]="embed"
+                    [title]="'Mapa de ' + loc.clinic"
+                    class="w-full h-64 rounded-[10px] border-0"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    allowfullscreen
+                  ></iframe>
                 }
+                <div class="flex items-center justify-between mt-3 px-1">
+                  <p class="font-sans text-[0.75rem] text-stone">{{ loc.clinic }}</p>
+                  @if (mapsHref(loc.query); as url) {
+                    <a
+                      [href]="url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1.5 font-sans text-[0.78rem] text-gold transition hover:text-gold-light"
+                    >
+                      Abrir localização
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                  }
+                </div>
               </div>
             </div>
           </div>
-        }
+        </div>
       </li>
     }
   </ul>

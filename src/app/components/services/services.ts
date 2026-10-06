@@ -57,11 +57,18 @@ export class Services {
       ariaLabel: 'Agendar acompanhamento respiratório',
     },
     {
-      title: 'Risco Cirúrgico & Polissonografia',
-      description: 'Avaliação pré-operatória e exame do sono para investigar alterações respiratórias e distúrbios noturnos.',
+      title: 'Avaliação de Risco Cirúrgico',
+      description: 'Avaliação clínica pré-operatória das condições gerais do paciente e dos possíveis riscos relacionados à cirurgia.',
       modality: 'Presencial',
-      message: 'Olá! Gostaria de agendar uma Avaliação de Risco Cirúrgico ou Polissonografia.',
-      ariaLabel: 'Agendar avaliação cirúrgica ou polissonografia',
+      message: 'Olá! Gostaria de agendar uma Avaliação de Risco Cirúrgico com a Dra. Anne Valéria.',
+      ariaLabel: 'Agendar avaliação de risco cirúrgico',
+    },
+    {
+      title: 'Polissonografia',
+      description: 'Exame para avaliar a qualidade do sono e investigar alterações respiratórias ou distúrbios do sono.',
+      modality: 'Presencial',
+      message: 'Olá! Gostaria de agendar uma Polissonografia com a Dra. Anne Valéria.',
+      ariaLabel: 'Agendar polissonografia',
     },
   ];
 

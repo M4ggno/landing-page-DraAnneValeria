@@ -42,9 +42,12 @@ export class Locations {
   ];
 
   protected readonly openIndex = signal<number | null>(null);
+  /** Painéis já abertos: o mapa só é carregado na primeira abertura e mantido para a animação de fechar. */
+  protected readonly visited = signal<ReadonlySet<number>>(new Set());
   private readonly sanitizer = inject(DomSanitizer);
 
   toggle(index: number): void {
+    this.visited.update((set) => (set.has(index) ? set : new Set(set).add(index)));
     this.openIndex.update((current) => (current === index ? null : index));
   }
 

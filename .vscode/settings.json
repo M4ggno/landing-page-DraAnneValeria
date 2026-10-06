@@ -1,0 +1,37 @@
+{
+    "fledge.experimental.agent.imageSandbox": {
+        "enabled": true,
+        "allowedMimeTypes": [
+            "image/png",
+            "image/jpeg",
+            "image/webp"
+        ]
+    },
+    "workbench.colorCustomizations": {
+        "editor.lineHighlightBackground": "#ffffff08",
+        "editorCursor.foreground": "#ffb86c",
+        "terminalCursor.foreground": "#ffb86c",
+        "activityBar.border": "#ffffff10",
+        "sideBar.border": "#ffffff10",
+        "editorGroup.border": "#ffffff10",
+        "tab.activeBorderTop": "#ffb86c",
+        "tab.selectedBorderTop": "#ffb86c",
+        "editor.background": "#000000",
+        "editorGutter.background": "#000000",
+        "editorGroupHeader.tabsBackground": "#000000",
+        "tab.activeBackground": "#000000",
+        "tab.inactiveBackground": "#000000",
+        "breadcrumb.background": "#000000",
+        "sideBar.background": "#000000",
+        "sideBarSectionHeader.background": "#000000",
+        "activityBar.background": "#000000",
+        "panel.background": "#000000",
+        "terminal.background": "#000000",
+        "titleBar.activeBackground": "#000000",
+        "titleBar.inactiveBackground": "#000000",
+        "statusBar.background": "#000000",
+        "editor.lineHighlightBackground": "#0d0d0d",
+        "editor.lineHighlightBorder": "#0d0d0d"
+    },
+}
+

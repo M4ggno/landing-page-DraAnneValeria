@@ -6,7 +6,7 @@
   [class.border-gold/20]="scrolled()"
   aria-label="Navegação principal"
 >
-  <a href="#inicio" aria-label="Ir para início" (click)="closeMenu()">
+  <a href="#inicio" aria-label="Ir para início">
     <img src="icons/DraAnaValeria.svg" alt="Dra. Anne Valéria" class="h-11 opacity-90" />
   </a>
 
@@ -27,52 +27,17 @@
         (click)="agendar()"
         class="bg-gradient-to-br from-rust to-gold text-dark font-semibold text-[0.78rem] tracking-[0.08em] uppercase px-6 py-2.5 rounded-full transition hover:brightness-110 hover:scale-[1.03]"
       >
-        Agendar consulta
+        Agendar atendimento
       </button>
     </li>
   </ul>
 
-  <!-- Mobile hamburger -->
+  <!-- Mobile: apenas o botão de agendar -->
   <button
     type="button"
-    class="md:hidden p-2 text-beige"
-    (click)="toggleMenu()"
-    [attr.aria-expanded]="menuOpen()"
-    aria-label="Abrir menu"
+    (click)="agendar()"
+    class="md:hidden bg-gradient-to-br from-rust to-gold text-dark font-semibold text-[0.72rem] tracking-[0.08em] uppercase min-h-[44px] px-5 rounded-full transition active:scale-[0.97]"
   >
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      @if (menuOpen()) {
-        <path d="M6 6l12 12M18 6L6 18" />
-      } @else {
-        <path d="M4 7h16M4 12h16M4 17h16" />
-      }
-    </svg>
+    Agendar atendimento
   </button>
-
-  <!-- Mobile drawer -->
-  @if (menuOpen()) {
-    <div class="absolute top-full inset-x-0 bg-dark/95 backdrop-blur-lg border-b border-gold/20 md:hidden">
-      <ul class="flex flex-col gap-1 px-[4vw] py-6 list-none">
-        @for (link of links; track link.href) {
-          <li>
-            <a
-              [href]="link.href"
-              (click)="closeMenu()"
-              class="block py-3 font-sans text-sm tracking-[0.12em] uppercase text-beige/80"
-              >{{ link.label }}</a
-            >
-          </li>
-        }
-        <li class="pt-3">
-          <button
-            type="button"
-            (click)="agendar(); closeMenu()"
-            class="w-full bg-gradient-to-br from-rust to-gold text-dark font-semibold text-sm px-6 py-3 rounded-full"
-          >
-            Agendar consulta
-          </button>
-        </li>
-      </ul>
-    </div>
-  }
 </nav>

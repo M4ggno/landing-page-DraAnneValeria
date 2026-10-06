@@ -1,15 +1,17 @@
 <section id="sobre" aria-labelledby="about-heading" class="py-28 px-[4vw] bg-dark-warm">
   <div class="max-w-3xl mx-auto">
-    <div appFadeIn class="relative h-[400px] md:h-[520px] mb-8">
+    <div appFadeIn class="about-photo relative h-[420px] md:h-[560px] -mb-24 md:-mb-32">
+      <div aria-hidden="true" class="about-photo__glow"></div>
       <img
         src="photos/photo2_withoutBG.webp"
         alt="Dra. Anne Valéria — retrato informal"
-        class="absolute inset-0 w-full h-full object-contain object-bottom"
+        class="about-photo__img absolute inset-0 w-full h-full object-contain object-bottom"
         loading="lazy"
       />
+      <div aria-hidden="true" class="about-photo__blur"></div>
     </div>
 
-    <div appFadeIn [style.transition-delay.s]="0.15">
+    <div appFadeIn [style.transition-delay.s]="0.15" class="relative z-10">
       <p class="inline-flex items-center gap-2 font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-gold mb-6 before:content-[''] before:block before:w-7 before:h-px before:bg-gold">
         Sobre a médica
       </p>
