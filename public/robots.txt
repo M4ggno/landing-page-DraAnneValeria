@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap — substituir pela URL definitiva do domínio
+# Sitemap: https://SEU-DOMINIO.com.br/sitemap.xml
+
+# Bloquear assets técnicos do Angular
+Disallow: /assets/

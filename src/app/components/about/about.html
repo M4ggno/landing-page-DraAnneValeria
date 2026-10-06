@@ -1,0 +1,40 @@
+<section id="sobre" aria-labelledby="about-heading" class="py-28 px-[4vw] bg-dark-warm border-y border-gold/20">
+  <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center max-w-[1100px] mx-auto">
+    <div appFadeIn class="relative h-[360px] md:h-[560px]">
+      <img
+        src="photos/photo2_withoutBG.webp"
+        alt="Dra. Anne Valéria — retrato informal"
+        class="absolute left-0 top-0 w-[68%] h-full object-cover rounded-[120px_4px_120px_4px]"
+        loading="lazy"
+      />
+      <img
+        src="photos/photo3.webp"
+        alt="Dra. Anne Valéria — outra perspectiva profissional"
+        class="absolute right-0 bottom-0 w-[46%] h-[52%] object-cover rounded-[8px_80px_8px_80px] border-[3px] border-dark shadow-card"
+        loading="lazy"
+      />
+    </div>
+
+    <div appFadeIn [style.transition-delay.s]="0.15">
+      <span class="inline-block font-sans text-[0.68rem] font-medium tracking-[0.22em] uppercase text-gold mb-4">Sobre a médica</span>
+      <h2 id="about-heading" class="font-serif font-light text-[clamp(2rem,3.5vw,3rem)] leading-[1.15] mb-6">
+        Natural de Sapé,<br />feita pela <em class="italic text-gold-light">prática</em>
+      </h2>
+      <blockquote class="font-serif italic font-light text-[clamp(1.1rem,1.8vw,1.4rem)] text-beige leading-[1.65] border-l-2 border-gold pl-6 mb-8">
+        "Acredito em uma medicina baseada em escuta, investigação e individualização. Cada paciente deve ser compreendido de forma integral."
+      </blockquote>
+      <p class="font-sans text-[0.88rem] leading-[1.8] text-off-white/65 mb-6">
+        Com 37 anos de atuação, a Dra. Anne Valéria construiu sua trajetória a partir de residências em
+        Clínica Médica e Pneumologia, passando pelo Procardio, Hospital Unimed, Hospital São Vicente de Paulo
+        e Hospital Clementino Fraga em João Pessoa. Desde 1989 dedica-se ao acompanhamento individualizado de pacientes.
+      </p>
+      <div class="flex flex-wrap gap-2.5" aria-label="Registros profissionais">
+        @for (crm of crms; track crm) {
+          <span class="font-sans text-[0.7rem] font-medium text-gold px-3.5 py-1.5 rounded-full border border-gold/20 bg-gold/[0.06] tracking-[0.06em]">
+            {{ crm }}
+          </span>
+        }
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,3 +1,75 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
 
-@import 'tailwindcss';
+@theme {
+  /* Paleta (extraída das fotos + logo) */
+  --color-dark: #1a1410;
+  --color-dark-warm: #231c14;
+  --color-gold: #c9933a;
+  --color-gold-light: #e8b86d;
+  --color-rust: #c16738;
+  --color-beige: #e8d5b7;
+  --color-off-white: #f5f0e8;
+  --color-stone: #8d7d6b;
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+
+  --shadow-gold: 0 4px 40px rgba(201, 147, 58, 0.12);
+  --shadow-card: 0 2px 24px rgba(26, 20, 16, 0.35);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  @apply bg-dark text-off-white font-sans antialiased overflow-x-hidden;
+}
+
+img { @apply block max-w-full; }
+a { @apply no-underline text-inherit; }
+
+/* Fade-in por IntersectionObserver (diretiva appFadeIn) */
+.fade-in {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-up  { animation: fadeUp 0.9s var(--ease-out) both; }
+.animate-fade-right { animation: fadeRight 0.9s var(--ease-out) both; }
+
+/* Shimmer discreto para CTAs principais */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -70%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-20deg);
+  animation: shimmer 3.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%   { left: -70%; }
+  55%  { left: 130%; }
+  100% { left: 130%; }
+}
