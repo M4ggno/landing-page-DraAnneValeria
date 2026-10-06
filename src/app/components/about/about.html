@@ -1,23 +1,28 @@
-<section id="sobre" aria-labelledby="about-heading" class="py-28 px-[4vw] bg-dark-warm border-y border-gold/20">
-  <div class="grid md:grid-cols-2 gap-12 md:gap-20 items-center max-w-[1100px] mx-auto">
-    <div appFadeIn class="relative h-[380px] md:h-[560px]">
+<section id="sobre" aria-labelledby="about-heading" class="py-28 px-[4vw] bg-dark-warm">
+  <div class="max-w-3xl mx-auto">
+    <div appFadeIn class="relative h-[400px] md:h-[520px] mb-8">
       <img
         src="photos/photo2_withoutBG.webp"
         alt="Dra. Anne Valéria — retrato informal"
-        class="absolute left-0 top-0 w-full h-full object-contain object-bottom"
+        class="absolute inset-0 w-full h-full object-contain object-bottom"
         loading="lazy"
       />
     </div>
 
     <div appFadeIn [style.transition-delay.s]="0.15">
-      <span class="inline-block font-sans text-[0.68rem] font-medium tracking-[0.22em] uppercase text-gold mb-4">Sobre a médica</span>
-      <h2 id="about-heading" class="font-serif font-light text-[clamp(2rem,3.5vw,3rem)] leading-[1.15] mb-6">
-        Natural de Sapé,<br />feita pela <em class="italic text-gold-light">prática</em>
+      <p class="inline-flex items-center gap-2 font-sans text-[0.7rem] font-medium tracking-[0.2em] uppercase text-gold mb-6 before:content-[''] before:block before:w-7 before:h-px before:bg-gold">
+        Sobre a médica
+      </p>
+      <h2 id="about-heading" class="font-serif font-light text-[clamp(2.2rem,4vw,3.4rem)] leading-[1.1] mb-3">
+        Olá, eu sou a <em class="italic text-gold-light">Dra. Anne Valéria.</em>
       </h2>
-      <blockquote class="font-serif italic font-light text-[clamp(1.1rem,1.8vw,1.4rem)] text-beige leading-[1.65] border-l-2 border-gold pl-6 mb-8">
+      <p class="font-sans text-[0.85rem] text-stone tracking-[0.04em] mb-8">
+        Pneumologista · Alergologista · Imunologista — 37 anos de prática · CRM PB 3738
+      </p>
+      <blockquote class="font-serif italic font-light text-[clamp(1.05rem,1.6vw,1.3rem)] text-beige leading-[1.65] border-l-2 border-gold pl-6 mb-8">
         "Acredito em uma medicina baseada em escuta, investigação e individualização. Cada paciente deve ser compreendido de forma integral."
       </blockquote>
-      <p class="font-sans text-[0.88rem] leading-[1.8] text-off-white/65 mb-6">
+      <p class="font-sans text-[0.9rem] leading-[1.8] text-off-white/65 mb-8">
         Com 37 anos de atuação, a Dra. Anne Valéria construiu sua trajetória a partir de residências em
         Clínica Médica e Pneumologia, passando pelo Procardio, Hospital Unimed, Hospital São Vicente de Paulo
         e Hospital Clementino Fraga em João Pessoa. Desde 1989 dedica-se ao acompanhamento individualizado de pacientes.
