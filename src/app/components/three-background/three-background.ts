@@ -7,7 +7,9 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import type * as Three from 'three';
+import type * as Three from './three-lite';
+
+type ThreeLite = typeof Three;
 
 @Component({
   imports: [],
@@ -18,6 +20,7 @@ import type * as Three from 'three';
   host: {
     '(window:mousemove)': 'onMouseMove($event)',
     '(window:resize)': 'onResize()',
+    '(document:visibilitychange)': 'onVisibilityChange()',
   },
 })
 export class ThreeBackground implements OnInit {
@@ -25,7 +28,7 @@ export class ThreeBackground implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  private THREE?: typeof Three;
+  private THREE?: ThreeLite;
   private renderer?: Three.WebGLRenderer;
   private scene?: Three.Scene;
   private camera?: Three.PerspectiveCamera;
@@ -33,12 +36,26 @@ export class ThreeBackground implements OnInit {
   private lungPlane?: Three.Mesh;
   private mouse = { x: 0, y: 0 };
   private animId = 0;
+  private running = false;
+  private destroyed = false;
+  private reducedMotion = false;
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.destroyRef.onDestroy(() => this.dispose());
-    // three.js carregado sob demanda para não inflar o bundle inicial
-    this.THREE = await import('three');
-    this.init();
+    this.reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+    // three.js carregado só quando o navegador estiver ocioso, para não competir com o conteúdo inicial
+    const load = async () => {
+      const mod = await import('./three-lite');
+      if (this.destroyed) return;
+      this.THREE = mod;
+      this.init();
+    };
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => void load(), { timeout: 2500 });
+    } else {
+      setTimeout(() => void load(), 1200);
+    }
   }
 
   private init(): void {
@@ -46,15 +63,20 @@ export class ThreeBackground implements OnInit {
     if (!T) return;
     const canvas = this.canvasRef.nativeElement;
 
-    this.renderer = new T.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    this.renderer = new T.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: false,
+      powerPreference: 'low-power',
+    });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     this.scene = new T.Scene();
     this.camera = new T.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
     this.camera.position.z = 30;
 
-    const count = 680;
+    const count = window.innerWidth < 768 ? 360 : 680;
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 90;
@@ -78,27 +100,29 @@ export class ThreeBackground implements OnInit {
     this.particles = new T.Points(geo, mat);
     this.scene.add(this.particles);
 
-    // Pulmão (icon.svg) girando e pulsando no plano de fundo
+    // Pulmão (icon.svg) girando e "respirando" no plano de fundo
     const img = new Image();
     img.onload = () => {
+      if (this.destroyed || !this.scene) return;
       const c = document.createElement('canvas');
-      c.width = 1024;
-      c.height = 1024;
-      c.getContext('2d')!.drawImage(img, 0, 0, 1024, 1024);
+      c.width = 512;
+      c.height = 512;
+      c.getContext('2d')!.drawImage(img, 0, 0, 512, 512);
       const tex = new T.CanvasTexture(c);
       const plane = new T.Mesh(
         new T.PlaneGeometry(26, 26 * (303.75 / 358.5)),
         new T.MeshBasicMaterial({
           map: tex,
           transparent: true,
-          opacity: 0.14,
+          opacity: 0.1,
           depthWrite: false,
           blending: T.AdditiveBlending,
         }),
       );
       plane.position.z = -8;
       this.lungPlane = plane;
-      this.scene?.add(plane);
+      this.scene.add(plane);
+      if (this.reducedMotion) this.renderFrame();
     };
     img.src = 'icons/icon.svg';
 
@@ -110,7 +134,7 @@ export class ThreeBackground implements OnInit {
     });
     for (let r = 0; r < 3; r++) {
       const pts: Three.Vector3[] = [];
-      const segs = 128;
+      const segs = 96;
       const radius = 18 + r * 9;
       for (let s = 0; s <= segs; s++) {
         const a = (s / segs) * Math.PI * 2;
@@ -119,24 +143,44 @@ export class ThreeBackground implements OnInit {
       this.scene.add(new T.Line(new T.BufferGeometry().setFromPoints(pts), ringMat));
     }
 
-    this.animate();
+    if (this.reducedMotion) {
+      this.renderFrame();
+    } else {
+      this.start();
+    }
   }
 
-  private animate(): void {
-    this.animId = requestAnimationFrame(() => this.animate());
+  private start(): void {
+    if (this.running || this.reducedMotion || !this.renderer) return;
+    this.running = true;
+    const loop = () => {
+      if (!this.running) return;
+      this.renderFrame();
+      this.animId = requestAnimationFrame(loop);
+    };
+    this.animId = requestAnimationFrame(loop);
+  }
+
+  private stop(): void {
+    this.running = false;
+    cancelAnimationFrame(this.animId);
+  }
+
+  private renderFrame(): void {
     if (!this.renderer || !this.scene || !this.camera) return;
 
-    const t = Date.now() * 0.0004;
+    const now = performance.now();
+    const t = now * 0.0004;
     if (this.particles) {
       this.particles.rotation.y = t * 0.08 + this.mouse.x * 0.12;
       this.particles.rotation.x = t * 0.04 + this.mouse.y * 0.06;
     }
     if (this.lungPlane) {
-      this.lungPlane.rotation.z = t * 0.15;
-      // pulso em 3 frames, mesma cadência do icon-animated.svg (1.2s)
-      const phase = (Date.now() % 1200) / 1200;
-      const pulse = 1 + 0.12 * (0.5 - 0.5 * Math.cos(phase * Math.PI * 2));
-      this.lungPlane.scale.setScalar(pulse);
+      this.lungPlane.rotation.z = t * 0.08;
+      // "respiração" lenta e sutil (ciclo de 7s, ±2.5%) para não disputar atenção com o conteúdo
+      const phase = (now % 7000) / 7000;
+      const breath = 1 + 0.025 * (0.5 - 0.5 * Math.cos(phase * Math.PI * 2));
+      this.lungPlane.scale.setScalar(breath);
     }
     this.renderer.render(this.scene, this.camera);
   }
@@ -151,16 +195,26 @@ export class ThreeBackground implements OnInit {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    if (this.reducedMotion) this.renderFrame();
+  }
+
+  /** Pausa o loop quando a aba fica em segundo plano (economiza CPU/GPU e bateria). */
+  onVisibilityChange(): void {
+    if (document.hidden) this.stop();
+    else this.start();
   }
 
   private dispose(): void {
-    cancelAnimationFrame(this.animId);
+    this.destroyed = true;
+    this.stop();
     const T = this.THREE;
     if (!T) return;
     this.scene?.traverse((obj) => {
       if (obj instanceof T.Points || obj instanceof T.Line || obj instanceof T.Mesh) {
         obj.geometry.dispose();
-        (obj.material as Three.Material).dispose();
+        const material = obj.material as Three.Material & { map?: { dispose(): void } | null };
+        material.map?.dispose();
+        material.dispose();
       }
     });
     this.renderer?.dispose();

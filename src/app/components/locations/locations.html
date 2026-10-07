@@ -15,6 +15,9 @@
         <button
           type="button"
           (click)="toggle(i)"
+          (pointerenter)="warmUp()"
+          (pointerdown)="prefetch(i)"
+          (focus)="prefetch(i)"
           [attr.aria-expanded]="openIndex() === i"
           [attr.aria-controls]="'loc-panel-' + i"
           class="group w-full flex items-center justify-between gap-6 py-5 text-left"
@@ -42,26 +45,46 @@
           <div class="loc-panel__inner">
             <div class="loc-panel__content pb-7">
               <div class="rounded-[14px] border border-gold/20 bg-white/[0.03] p-3">
-                @if (visited().has(i) && mapsEmbed(loc.query); as embed) {
-                  <iframe
-                    [src]="embed"
-                    [title]="'Mapa de ' + loc.clinic"
-                    class="w-full h-64 rounded-[10px] border-0"
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    allowfullscreen
-                  ></iframe>
-                }
-                <div class="flex items-center justify-between mt-3 px-1">
-                  <p class="font-sans text-[0.75rem] text-stone">{{ loc.clinic }}</p>
-                  @if (mapsHref(loc.query); as url) {
+                @if (maps[i]; as map) {
+                  <div class="relative h-64 rounded-[10px] overflow-hidden bg-dark-warm">
+                    @if (!loaded().has(i)) {
+                      <div class="map-skeleton absolute inset-0" aria-hidden="true"></div>
+                    }
+                    @if (visited().has(i)) {
+                      <iframe
+                        [src]="map.embed"
+                        [title]="'Mapa de ' + loc.clinic"
+                        (load)="onMapLoad(i)"
+                        class="absolute inset-0 w-full h-full border-0 transition-opacity duration-500"
+                        [class.opacity-0]="!loaded().has(i)"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        tabindex="-1"
+                      ></iframe>
+                    }
+                    <!-- Toque no mapa abre o app nativo: Apple Maps (iPhone/iPad/Mac) ou Google Maps (demais) -->
                     <a
-                      [href]="url"
+                      [href]="map.href"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="inline-flex items-center gap-1.5 font-sans text-[0.78rem] text-gold transition hover:text-gold-light"
+                      [attr.aria-label]="'Abrir ' + loc.clinic + ' no ' + mapsAppName"
+                      class="group/map absolute inset-0 flex items-end justify-center p-3"
                     >
-                      Abrir localização
+                      <span class="font-sans text-[0.72rem] text-off-white bg-dark/80 backdrop-blur-sm border border-gold/25 rounded-full px-3.5 py-1.5 transition group-hover/map:border-gold/60">
+                        Toque para abrir no {{ mapsAppName }}
+                      </span>
+                    </a>
+                  </div>
+                }
+                <div class="flex items-center justify-between gap-4 mt-3 px-1">
+                  <p class="font-sans text-[0.75rem] text-stone">{{ loc.clinic }}</p>
+                  @if (maps[i]; as map) {
+                    <a
+                      [href]="map.href"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="shrink-0 inline-flex items-center gap-1.5 font-sans text-[0.78rem] text-gold transition hover:text-gold-light"
+                    >
+                      Abrir no {{ mapsAppName }}
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
                   }

@@ -5,13 +5,18 @@
   <app-navbar />
   <main>
     <app-hero />
-    <app-differentials />
-    <app-services />
-    <app-about />
-    <app-locations />
-    <app-cta />
+    <!-- Seções abaixo da dobra viram chunks separados, renderizados assim que o navegador fica ocioso -->
+    @defer (on idle) {
+      <app-differentials />
+      <app-services />
+      <app-about />
+      <app-locations />
+      <app-cta />
+    } @placeholder {
+      <div class="min-h-svh" aria-hidden="true"></div>
+    }
   </main>
-  <app-footer />
+  @defer (on idle) {
+    <app-footer />
+  }
 </div>
-
-<router-outlet />

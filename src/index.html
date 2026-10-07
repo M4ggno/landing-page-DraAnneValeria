@@ -2,61 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
+  <!-- SEO:START — gerado no build a partir de src/app/core/seo.ts (scripts/seo-inject.mjs). Não editar aqui. -->
   <title>Dra. Anne Valéria — Pneumologista, Alergologista e Imunologista | Patos PB</title>
+  <!-- SEO:END -->
   <base href="/">
-
-  <!-- ── SEO Core ───────────────────────────────────────────────────────────── -->
-  <meta name="description" content="Dra. Anne Valéria Macedo Faustino — Pneumologista, Alergologista e Imunologista com 37 anos de experiência. Atende em Patos, Sousa, Pombal (PB), Caicó (RN) e Afogados da Ingazeira (PE). Agende pelo WhatsApp.">
-  <meta name="keywords" content="pneumologista patos pb, alergologista patos pb, imunologista, dra anne valeria, consulta pneumologia, asma bronquite rinite alergia, clinap, instituto yso">
-  <meta name="author" content="Dra. Anne Valéria Macedo Faustino">
-  <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#1a1410">
-
-  <!-- ── Canonical — substituir pela URL definitiva ──────────────────────── -->
-  <!-- <link rel="canonical" href="https://SEU-DOMINIO.com.br/"> -->
-
-  <!-- ── Open Graph (redes sociais) ──────────────────────────────────────── -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Dra. Anne Valéria — Pneumologista, Alergologista e Imunologista">
-  <meta property="og:description" content="37 anos de experiência em Pneumologia, Alergia e Imunologia. Atendimento humanizado e individualizado. Agende sua consulta.">
-  <meta property="og:image" content="/photos/photo1.webp">
-  <!-- <meta property="og:url" content="https://SEU-DOMINIO.com.br/"> -->
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:site_name" content="Dra. Anne Valéria">
-
-  <!-- ── Twitter Card ─────────────────────────────────────────────────────── -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Dra. Anne Valéria — Pneumologista, Alergologista e Imunologista">
-  <meta name="twitter:description" content="37 anos de experiência em Pneumologia, Alergia e Imunologia. Agende sua consulta pelo WhatsApp.">
-  <meta name="twitter:image" content="/photos/photo1.webp">
-
-  <!-- ── Structured Data (Schema.org) ────────────────────────────────────── -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Physician",
-    "name": "Dra. Anne Valéria Macedo Faustino",
-    "description": "Pneumologista, Alergologista e Imunologista com 37 anos de experiência. Atendimento humanizado e individualizado.",
-    "medicalSpecialty": ["Pulmonary Medicine", "Allergy", "Immunology"],
-    "image": "/photos/photo1.webp",
-    "telephone": "+558398234-9308",
-    "sameAs": ["https://www.instagram.com/draannevaleria_/"],
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Patos",
-      "addressRegion": "PB",
-      "addressCountry": "BR"
-    },
-    "availableService": [
-      { "@type": "MedicalTherapy", "name": "Consulta em Pneumologia" },
-      { "@type": "MedicalTherapy", "name": "Avaliação de Alergias e Imunidade" },
-      { "@type": "MedicalTest",    "name": "Espirometria" },
-      { "@type": "MedicalTherapy", "name": "Imunoterapia" },
-      { "@type": "MedicalTest",    "name": "Polissonografia" },
-      { "@type": "MedicalTherapy", "name": "Avaliação de Risco Cirúrgico" }
-    ]
-  }
-  </script>
 
   <!-- ── Viewport ─────────────────────────────────────────────────────────── -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -65,7 +14,10 @@
   <!-- ── Google Fonts ─────────────────────────────────────────────────────── -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Imagem principal do hero: começa a baixar antes do Angular inicializar (melhora o LCP) -->
+  <link rel="preload" as="image" href="photos/photo1.webp" type="image/webp" fetchpriority="high">
 </head>
 <body>
   <app-root></app-root>
