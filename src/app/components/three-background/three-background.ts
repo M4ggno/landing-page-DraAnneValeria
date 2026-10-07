@@ -33,7 +33,6 @@ export class ThreeBackground implements OnInit {
   private scene?: Three.Scene;
   private camera?: Three.PerspectiveCamera;
   private particles?: Three.Points;
-  private lungPlane?: Three.Mesh;
   private mouse = { x: 0, y: 0 };
   private animId = 0;
   private running = false;
@@ -100,7 +99,7 @@ export class ThreeBackground implements OnInit {
     this.particles = new T.Points(geo, mat);
     this.scene.add(this.particles);
 
-    // Pulmão (icon.svg) girando e "respirando" no plano de fundo
+    // Pulmão (icon.svg) estático no plano de fundo
     const img = new Image();
     img.onload = () => {
       if (this.destroyed || !this.scene) return;
@@ -120,7 +119,6 @@ export class ThreeBackground implements OnInit {
         }),
       );
       plane.position.z = -8;
-      this.lungPlane = plane;
       this.scene.add(plane);
       if (this.reducedMotion) this.renderFrame();
     };
@@ -169,19 +167,12 @@ export class ThreeBackground implements OnInit {
   private renderFrame(): void {
     if (!this.renderer || !this.scene || !this.camera) return;
 
-    const now = performance.now();
-    const t = now * 0.0004;
+    const t = performance.now() * 0.0004;
     if (this.particles) {
       this.particles.rotation.y = t * 0.08 + this.mouse.x * 0.12;
       this.particles.rotation.x = t * 0.04 + this.mouse.y * 0.06;
     }
-    if (this.lungPlane) {
-      this.lungPlane.rotation.z = t * 0.08;
-      // "respiração" lenta e sutil (ciclo de 7s, ±2.5%) para não disputar atenção com o conteúdo
-      const phase = (now % 7000) / 7000;
-      const breath = 1 + 0.025 * (0.5 - 0.5 * Math.cos(phase * Math.PI * 2));
-      this.lungPlane.scale.setScalar(breath);
-    }
+    // pulmão fica estático (sem rotação/pulso): só as partículas se movem
     this.renderer.render(this.scene, this.camera);
   }
 
