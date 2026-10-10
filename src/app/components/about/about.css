@@ -26,9 +26,9 @@
 .about-photo__card {
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: 3%;
   width: 100%;
-  height: 58%;
+  height: 62%;
   border-radius: 1.75rem;
   background-image: url('/photos/backgroud4.webp');
   background-size: cover;
