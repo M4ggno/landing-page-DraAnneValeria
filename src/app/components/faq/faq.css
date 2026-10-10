@@ -17,8 +17,10 @@
 }
 
 .faq-photo__img {
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+  /* Esfumaça o perímetro (recorte sem bordas definidas): feather suave em volta + blur mínimo na borda */
+  filter: blur(0.35px);
+  -webkit-mask-image: radial-gradient(ellipse 106% 102% at 50% 44%, #000 74%, transparent 96%);
+  mask-image: radial-gradient(ellipse 106% 102% at 50% 44%, #000 74%, transparent 96%);
 }
 
 .faq-photo__blur {
