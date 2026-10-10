@@ -1,4 +1,4 @@
-/* Carrossel horizontal de serviços (scroll-snap) */
+/* Carrossel horizontal de serviços (modo livre com scroll-snap) */
 .services-scroller {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -10,8 +10,55 @@
   display: none;
 }
 
+/* Modo "pinned" (primeira visita): a seção fica presa e o scroll vertical move os cards. */
+.svc-pin {
+  position: relative;
+}
+
+.svc-pin.svc-locked {
+  height: calc(100svh + var(--svc-distance, 0px));
+}
+
+.svc-sticky {
+  position: relative;
+}
+
+.svc-pin.svc-locked .svc-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* No modo pinned o track cresce com o conteúdo e é transladado por JS. */
+.svc-track {
+  width: max-content;
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .services-scroller {
     scroll-behavior: auto;
+  }
+
+  /* Sem efeito pinned quando o usuário reduz movimento. */
+  .svc-pin.svc-locked {
+    height: auto;
+  }
+
+  .svc-pin.svc-locked .svc-sticky {
+    position: relative;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .svc-track {
+    width: auto;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    will-change: auto;
   }
 }

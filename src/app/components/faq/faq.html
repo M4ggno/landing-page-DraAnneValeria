@@ -1,52 +1,69 @@
 <section id="faq" aria-labelledby="faq-heading" class="py-28 px-[4vw] bg-dark-warm">
-  <div class="max-w-3xl mx-auto">
-    <div class="text-center mb-14">
-      <span class="inline-block font-sans text-[0.68rem] font-medium tracking-[0.22em] uppercase text-gold mb-4">Dúvidas frequentes</span>
+  <div class="max-w-5xl mx-auto grid gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
+    <div class="faq-photo" appFadeIn>
+      <div class="md:sticky md:top-24">
+        <div aria-hidden="true" class="faq-photo__glow"></div>
+        <img
+          src="photos/photo3_withoutBG.webp"
+          alt="Dra. Anne Valéria, médica pneumologista"
+          width="640"
+          height="800"
+          loading="lazy"
+          decoding="async"
+          class="faq-photo__img relative mx-auto w-full max-w-[300px] md:max-w-none h-auto"
+        />
+      </div>
+    </div>
+
+    <div appFadeIn [style.transition-delay.s]="0.12">
+      <span class="inline-flex items-center gap-2.5 font-sans text-[0.68rem] font-medium tracking-[0.22em] uppercase text-gold mb-5 before:content-[''] before:block before:w-7 before:h-px before:bg-gold/60">
+        Dúvidas frequentes
+      </span>
       <h2 id="faq-heading" class="font-serif font-light text-[clamp(2rem,3.5vw,3rem)] leading-[1.15]">
         Perguntas <em class="italic text-gold-light">frequentes</em>
       </h2>
-      <p class="mt-3 font-sans text-[0.9rem] text-stone leading-[1.7]">
+      <p class="mt-3 mb-8 font-sans text-[0.9rem] text-stone leading-[1.7]">
         O que os pacientes costumam perguntar antes de agendar — toque para ver a resposta.
       </p>
-    </div>
 
-    <ul class="divide-y divide-gold/15 border-y border-gold/15">
-      @for (item of items; track item.question; let i = $index) {
-        <li appFadeIn [style.transition-delay.s]="i * 0.04">
-          <h3>
-            <button
-              type="button"
-              (click)="toggle(i)"
-              [attr.aria-expanded]="openIndex() === i"
-              [attr.aria-controls]="'faq-panel-' + i"
-              class="group w-full flex items-center justify-between gap-6 py-5 text-left"
-            >
-              <span class="font-serif text-[1.1rem] font-normal">{{ item.question }}</span>
-              <svg
-                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                aria-hidden="true"
-                class="faq-chevron shrink-0 text-gold"
-                [class.rotate-180]="openIndex() === i"
+      <ul class="divide-y divide-gold/15 border-y border-gold/15">
+        @for (item of items; track item.question; let i = $index) {
+          <li>
+            <h3>
+              <button
+                type="button"
+                (click)="toggle(i)"
+                [attr.aria-expanded]="openIndex() === i"
+                [attr.aria-controls]="'faq-panel-' + i"
+                class="group w-full flex items-center justify-between gap-6 py-5 text-left"
               >
-                <path d="m6 9 6 6 6-6"/>
-              </svg>
-            </button>
-          </h3>
+                <span class="font-serif text-[1.1rem] font-normal">{{ item.question }}</span>
+                <svg
+                  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  aria-hidden="true"
+                  class="faq-chevron shrink-0 text-gold"
+                  [class.rotate-180]="openIndex() === i"
+                >
+                  <path d="m6 9 6 6 6-6"/>
+                </svg>
+              </button>
+            </h3>
 
-          <div
-            [id]="'faq-panel-' + i"
-            class="faq-panel"
-            [class.is-open]="openIndex() === i"
-            [attr.inert]="openIndex() === i ? null : ''"
-          >
-            <div class="faq-panel__inner">
-              <div class="faq-panel__content pb-6 pr-8">
-                <p class="font-sans text-[0.88rem] leading-[1.75] text-stone">{{ item.answer }}</p>
+            <div
+              [id]="'faq-panel-' + i"
+              class="faq-panel"
+              [class.is-open]="openIndex() === i"
+              [attr.inert]="openIndex() === i ? null : ''"
+            >
+              <div class="faq-panel__inner">
+                <div class="faq-panel__content pb-6 pr-8">
+                  <p class="font-sans text-[0.88rem] leading-[1.75] text-stone">{{ item.answer }}</p>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-      }
-    </ul>
+          </li>
+        }
+      </ul>
+    </div>
   </div>
 </section>

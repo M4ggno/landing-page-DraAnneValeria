@@ -1,3 +1,25 @@
+/* Foto da médica na coluna lateral do FAQ */
+.faq-photo {
+  position: relative;
+}
+
+.faq-photo__glow {
+  position: absolute;
+  left: 50%;
+  top: 4%;
+  width: min(360px, 88%);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(201 147 58 / 0.22) 0%, rgb(201 147 58 / 0) 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.faq-photo__img {
+  filter: drop-shadow(0 24px 44px rgb(0 0 0 / 0.4));
+}
+
 /* Drop-down do FAQ: altura animada via grid-template-rows (0fr → 1fr) */
 .faq-panel {
   display: grid;
