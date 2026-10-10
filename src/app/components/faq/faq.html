@@ -1,32 +1,33 @@
 <section id="faq" aria-labelledby="faq-heading" class="py-28 px-[4vw] bg-dark-warm">
-  <div class="max-w-5xl mx-auto grid gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-16">
-    <div class="faq-photo" appFadeIn>
-      <div class="md:sticky md:top-24">
-        <div aria-hidden="true" class="faq-photo__glow"></div>
-        <img
-          src="photos/photo3_withoutBG.webp"
-          alt="Dra. Anne Valéria, médica pneumologista"
-          width="640"
-          height="800"
-          loading="lazy"
-          decoding="async"
-          class="faq-photo__img relative mx-auto w-full max-w-[300px] md:max-w-none h-auto"
-        />
-      </div>
+  <div class="max-w-3xl mx-auto">
+    <!-- Foto no mesmo tratamento da seção "Sobre": brilho, base esfumaçada e camada de partículas -->
+    <div appFadeIn class="faq-photo relative h-[280px] md:h-[380px] -mb-16 md:-mb-24">
+      <div aria-hidden="true" class="faq-photo__glow"></div>
+      <img
+        src="photos/photo3_withoutBG.webp"
+        alt="Dra. Anne Valéria, médica pneumologista"
+        width="640"
+        height="800"
+        loading="lazy"
+        decoding="async"
+        class="faq-photo__img absolute inset-0 w-full h-full object-contain object-bottom"
+      />
+      <div aria-hidden="true" class="faq-photo__blur"></div>
+      <app-particle-field></app-particle-field>
     </div>
 
-    <div appFadeIn [style.transition-delay.s]="0.12">
-      <span class="inline-flex items-center gap-2.5 font-sans text-[0.68rem] font-medium tracking-[0.22em] uppercase text-gold mb-5 before:content-[''] before:block before:w-7 before:h-px before:bg-gold/60">
+    <div appFadeIn [style.transition-delay.s]="0.12" class="relative z-10 text-center">
+      <span class="inline-flex items-center gap-2.5 font-sans text-[0.68rem] font-medium tracking-[0.22em] uppercase text-gold mb-5">
         Dúvidas frequentes
       </span>
       <h2 id="faq-heading" class="font-serif font-light text-[clamp(2rem,3.5vw,3rem)] leading-[1.15]">
         Perguntas <em class="italic text-gold-light">frequentes</em>
       </h2>
-      <p class="mt-3 mb-8 font-sans text-[0.9rem] text-stone leading-[1.7]">
+      <p class="mt-3 mb-8 mx-auto max-w-[520px] font-sans text-[0.9rem] text-stone leading-[1.7]">
         O que os pacientes costumam perguntar antes de agendar — toque para ver a resposta.
       </p>
 
-      <ul class="divide-y divide-gold/15 border-y border-gold/15">
+      <ul class="text-left divide-y divide-gold/15 border-y border-gold/15">
         @for (item of items; track item.question; let i = $index) {
           <li>
             <h3>

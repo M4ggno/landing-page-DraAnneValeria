@@ -1,4 +1,4 @@
-/* Foto da médica na coluna lateral do FAQ */
+/* Foto do FAQ: mesmo tratamento da seção "Sobre" — brilho quente atrás e base que se funde ao fundo */
 .faq-photo {
   position: relative;
 }
@@ -6,8 +6,8 @@
 .faq-photo__glow {
   position: absolute;
   left: 50%;
-  top: 4%;
-  width: min(360px, 88%);
+  top: 14%;
+  width: min(380px, 82%);
   aspect-ratio: 1;
   transform: translateX(-50%);
   border-radius: 50%;
@@ -17,7 +17,20 @@
 }
 
 .faq-photo__img {
-  filter: drop-shadow(0 24px 44px rgb(0 0 0 / 0.4));
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+}
+
+.faq-photo__blur {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(to bottom, rgb(35 28 20 / 0) 0%, var(--color-dark-warm) 85%);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 60%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 60%);
+  pointer-events: none;
 }
 
 /* Drop-down do FAQ: altura animada via grid-template-rows (0fr → 1fr) */

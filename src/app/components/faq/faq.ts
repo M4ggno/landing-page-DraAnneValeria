@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FadeInDirective } from '../../core/fade-in.directive';
+import { ParticleField } from '../particle-field/particle-field';
 import { FAQS } from '../../core/seo';
 
 @Component({
-  imports: [FadeInDirective],
+  imports: [FadeInDirective, ParticleField],
   selector: 'app-faq',
   styleUrl: './faq.css',
   templateUrl: './faq.html',
