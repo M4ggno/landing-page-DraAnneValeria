@@ -53,6 +53,50 @@ export const SEO = {
   },
 } as const;
 
+/** Perguntas frequentes — fonte única para a seção FAQ e para o Schema.org (FAQPage). */
+export interface FaqEntry {
+  question: string;
+  answer: string;
+}
+
+export const FAQS: FaqEntry[] = [
+  {
+    question: 'Preciso de encaminhamento médico?',
+    answer:
+      'Não. A consulta pode ser agendada diretamente pelo WhatsApp, sem necessidade de encaminhamento. A equipe confirma as informações e o melhor horário disponível.',
+  },
+  {
+    question: 'O atendimento é por convênio ou particular?',
+    answer:
+      'O atendimento é particular, com retorno incluído e acompanhamento continuado. A equipe informa as formas de pagamento no momento do agendamento.',
+  },
+  {
+    question: 'A médica atende on-line (teleatendimento)?',
+    answer:
+      'Sim. As consultas de Pneumologia e a avaliação de alergias e imunidade estão disponíveis na modalidade on-line. Exames como espirometria e polissonografia são presenciais.',
+  },
+  {
+    question: 'Quais exames e procedimentos são realizados?',
+    answer:
+      'Entre os principais estão a espirometria (avaliação da função pulmonar), a polissonografia (distúrbios do sono), a avaliação de risco cirúrgico e o acompanhamento de doenças respiratórias crônicas.',
+  },
+  {
+    question: 'Como funciona o retorno?',
+    answer:
+      'O retorno é incluído após a consulta inicial, para revisão de exames e ajuste do tratamento, garantindo acompanhamento próximo durante toda a conduta.',
+  },
+  {
+    question: 'Em quais cidades há atendimento presencial?',
+    answer:
+      'Patos (PB — CLINAP), Sousa (PB — Instituto YSO), Pombal (PB — Núcleo Vida), Caicó (RN — Clinical Center), Afogados da Ingazeira (PE) e unidades na Bahia.',
+  },
+  {
+    question: 'Qual o horário de atendimento da equipe?',
+    answer:
+      'A equipe responde pelo WhatsApp de segunda a sábado, das 8h às 17h. O retorno é feito o quanto antes, na ordem das mensagens.',
+  },
+];
+
 /** Remove barra final e garante protocolo. Retorna '' se não houver URL. */
 export function normalizeSiteUrl(url: string | undefined | null): string {
   if (!url) return '';
@@ -121,6 +165,19 @@ export function seoJsonLd(siteUrl: string): Record<string, unknown> {
   };
 }
 
+/** Dados estruturados Schema.org (FAQPage) a partir das perguntas frequentes. */
+export function seoFaqJsonLd(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+}
+
 function escapeAttr(value: string): string {
   return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
@@ -136,6 +193,8 @@ export function renderSeoHead(siteUrl: string): string {
   if (siteUrl) lines.push(`<link rel="canonical" href="${siteUrl}/">`);
   const json = JSON.stringify(seoJsonLd(siteUrl), null, 2).replace(/</g, '\\u003c');
   lines.push(`<script type="application/ld+json">\n${json}\n</script>`);
+  const faqJson = JSON.stringify(seoFaqJsonLd(), null, 2).replace(/</g, '\\u003c');
+  lines.push(`<script type="application/ld+json">\n${faqJson}\n</script>`);
   return lines.map((l) => `  ${l}`).join('\n');
 }
 

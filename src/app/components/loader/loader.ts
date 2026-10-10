@@ -11,6 +11,7 @@ export class Loader {
   protected readonly hidden = signal(false);
 
   constructor() {
-    setTimeout(() => this.hidden.set(true), 1650);
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    setTimeout(() => this.hidden.set(true), reduce ? 300 : 1650);
   }
 }

@@ -38,3 +38,30 @@ if (!pattern.test(html)) {
 }
 await writeFile(indexPath, html.replace(pattern, renderSeoHead(siteUrl)));
 console.log(`[seo] Tags injetadas em index.html (${siteUrl || 'sem domínio'})`);
+
+// Sitemap + linha Sitemap: no robots.txt (a página é única; âncoras não são URLs de sitemap).
+if (siteUrl) {
+  const browserDir = dirname(indexPath);
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${siteUrl}/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
+`;
+  await writeFile(join(browserDir, 'sitemap.xml'), sitemap);
+  try {
+    const robotsPath = join(browserDir, 'robots.txt');
+    let robots = await readFile(robotsPath, 'utf8');
+    if (!/^\s*Sitemap:/im.test(robots)) {
+      robots = `${robots.trimEnd()}\n\nSitemap: ${siteUrl}/sitemap.xml\n`;
+      await writeFile(robotsPath, robots);
+    }
+  } catch {
+    // robots.txt ausente: ignora
+  }
+  console.log(`[seo] sitemap.xml gerado (${siteUrl}/sitemap.xml)`);
+}
+

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FadeInDirective } from '../../core/fade-in.directive';
 import { WhatsappService } from '../../core/whatsapp.service';
 
@@ -19,6 +19,8 @@ interface Service {
 })
 export class Services {
   private readonly whatsapp = inject(WhatsappService);
+
+  protected readonly openIndex = signal<number | null>(null);
 
   protected readonly services: Service[] = [
     {
@@ -72,7 +74,15 @@ export class Services {
     },
   ];
 
-  agendar(service: Service): void {
+  protected pad(index: number): string {
+    return String(index + 1).padStart(2, '0');
+  }
+
+  protected toggle(index: number): void {
+    this.openIndex.update((current) => (current === index ? null : index));
+  }
+
+  protected agendar(service: Service): void {
     this.whatsapp.open(service.message);
   }
 }

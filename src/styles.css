@@ -73,3 +73,22 @@ a { @apply no-underline text-inherit; }
   55%  { left: 130%; }
   100% { left: 130%; }
 }
+
+/* Acessibilidade: desliga movimento para quem pediu menos animação no sistema */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .fade-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-fade-up,
+  .animate-fade-right {
+    animation: none;
+  }
+  .btn-shimmer::after {
+    animation: none;
+    display: none;
+  }
+}

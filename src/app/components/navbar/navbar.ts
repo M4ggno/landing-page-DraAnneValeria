@@ -18,6 +18,7 @@ export class Navbar {
     { href: '#sobre', label: 'Sobre' },
     { href: '#servicos', label: 'Serviços' },
     { href: '#localizacao', label: 'Localização' },
+    { href: '#faq', label: 'Dúvidas' },
   ];
 
   onScroll(): void {

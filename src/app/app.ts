@@ -9,6 +9,7 @@ import { Differentials } from './components/differentials/differentials';
 import { Services } from './components/services/services';
 import { About } from './components/about/about';
 import { Locations } from './components/locations/locations';
+import { Faq } from './components/faq/faq';
 import { Cta } from './components/cta/cta';
 import { Footer } from './components/footer/footer';
 
@@ -22,6 +23,7 @@ import { Footer } from './components/footer/footer';
     Services,
     About,
     Locations,
+    Faq,
     Cta,
     Footer,
   ],
