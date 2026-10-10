@@ -1,41 +1,17 @@
-/* Drop-down dos serviços: altura animada via grid-template-rows (0fr → 1fr) */
-.svc-panel {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+/* Carrossel horizontal de serviços (scroll-snap) */
+.services-scroller {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-padding-left: 4vw;
+  -webkit-overflow-scrolling: touch;
 }
 
-.svc-panel.is-open {
-  grid-template-rows: 1fr;
-}
-
-.svc-panel__inner {
-  min-height: 0;
-  overflow: hidden;
-}
-
-.svc-panel__content {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition:
-    opacity 0.3s ease,
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.svc-panel.is-open .svc-panel__content {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.08s;
-}
-
-.svc-chevron {
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+.services-scroller::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .svc-panel,
-  .svc-panel__content,
-  .svc-chevron {
-    transition: none;
+  .services-scroller {
+    scroll-behavior: auto;
   }
 }

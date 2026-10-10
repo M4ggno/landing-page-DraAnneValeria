@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  afterNextRender,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FadeInDirective } from '../../core/fade-in.directive';
 import { WhatsappService } from '../../core/whatsapp.service';
 
@@ -19,8 +27,10 @@ interface Service {
 })
 export class Services {
   private readonly whatsapp = inject(WhatsappService);
+  private readonly scroller = viewChild<ElementRef<HTMLElement>>('scroller');
 
-  protected readonly openIndex = signal<number | null>(null);
+  protected readonly atStart = signal(true);
+  protected readonly atEnd = signal(false);
 
   protected readonly services: Service[] = [
     {
@@ -74,15 +84,45 @@ export class Services {
     },
   ];
 
+  constructor() {
+    afterNextRender(() => this.updateEdges());
+  }
+
   protected pad(index: number): string {
     return String(index + 1).padStart(2, '0');
   }
 
-  protected toggle(index: number): void {
-    this.openIndex.update((current) => (current === index ? null : index));
+  /** Avança/recua um card (largura do card + gap), com rolagem suave. */
+  protected scrollBy(direction: -1 | 1): void {
+    const el = this.scroller()?.nativeElement;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>('[data-card]');
+    const step = card ? card.offsetWidth + 20 : el.clientWidth * 0.8;
+    el.scrollBy({ left: step * direction, behavior: 'smooth' });
+  }
+
+  protected onScroll(): void {
+    this.updateEdges();
+  }
+
+  protected onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.scrollBy(1);
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      this.scrollBy(-1);
+    }
   }
 
   protected agendar(service: Service): void {
     this.whatsapp.open(service.message);
+  }
+
+  private updateEdges(): void {
+    const el = this.scroller()?.nativeElement;
+    if (!el) return;
+    this.atStart.set(el.scrollLeft <= 2);
+    this.atEnd.set(el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
   }
 }
