@@ -12,11 +12,37 @@
   pointer-events: none;
 }
 
+/* Card atrás da foto: painel com relevo que sustenta o recorte (o topo da figura vaza para cima) */
+.about-photo__card {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(400px, 84%);
+  height: 58%;
+  transform: translateX(-50%);
+  border-radius: 1.75rem;
+  background: linear-gradient(180deg, rgb(48 37 25 / 0.94) 0%, rgb(34 26 17 / 0.97) 55%, rgb(24 19 12 / 0.99) 100%);
+  border: 1px solid rgb(201 147 58 / 0.16);
+  box-shadow:
+    inset 0 1px 0 rgb(255 235 190 / 0.12),
+    inset 0 -1px 0 rgb(0 0 0 / 0.45),
+    0 26px 54px -22px rgb(0 0 0 / 0.6);
+}
+
 .about-photo__img {
-  /* A silhueta já vem com borda macia no arquivo; aqui só esfumacamos a base */
-  filter: blur(0.3px);
+  /* A silhueta já vem com borda macia no arquivo; aqui só esfumacamos a base.
+     drop-shadow segue o contorno macio e dá o relevo da figura sobre o card. */
+  filter: blur(0.3px) drop-shadow(0 22px 26px rgb(8 6 3 / 0.5));
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+}
+
+/* Vinheta lateral: afoga suavemente as laterais (onde o recorte é "seco") no fundo */
+.about-photo__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 105% at 50% 42%, transparent 56%, rgb(13 10 6 / 0.34) 100%);
+  pointer-events: none;
 }
 
 .about-photo__blur {
