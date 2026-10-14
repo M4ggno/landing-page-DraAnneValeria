@@ -12,29 +12,51 @@
     </p>
   </div>
 
-  <div class="svc-stack">
-    @for (service of services; track service.title; let i = $index) {
-      <article
-        [style.--i]="i"
-        class="svc-card"
-      >
-        <header class="svc-card__head">
-          <span class="font-serif italic font-light text-2xl text-rust leading-none">{{ pad(i) }}</span>
-          <span class="font-sans text-[0.6rem] font-medium tracking-[0.12em] uppercase text-gold/80 border border-gold/20 rounded-full px-3 py-1">{{ service.modality }}</span>
-        </header>
-        <h3 class="mt-5 font-serif text-[1.35rem] font-normal leading-snug mb-3">{{ service.title }}</h3>
-        <p class="font-sans text-[0.85rem] leading-[1.7] text-stone flex-1">{{ service.description }}</p>
-        <button
-          type="button"
-          (click)="agendar(service)"
-          [attr.aria-label]="service.ariaLabel"
-          class="mt-7 inline-flex items-center justify-center gap-2 self-start min-h-[48px] rounded-full border border-gold/25 bg-gold/[0.06] px-5 font-sans text-[0.82rem] text-gold transition duration-300 hover:border-gold hover:bg-gold/[0.12] hover:text-gold-light"
+  <div class="svc-wrap">
+    <!-- Índice lateral (desktop): acompanha a pilha e destaca o card no topo -->
+    <div class="svc-rail" aria-hidden="true">
+      <ol class="svc-rail__inner">
+        @for (service of services; track service.title; let i = $index) {
+          <li class="svc-rail__item" [class.is-active]="activeIndex() === i">{{ pad(i) }}</li>
+        }
+      </ol>
+    </div>
+
+    <div class="svc-stack" #stack>
+      @for (service of services; track service.title; let i = $index) {
+        <article
+          #card
+          [style.--i]="i"
+          class="svc-card"
         >
-          Agendar no WhatsApp
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </article>
-    }
+          <span aria-hidden="true" class="svc-card__ghost">{{ pad(i) }}</span>
+
+          <header class="svc-card__head">
+            <span class="svc-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                @for (d of service.icon; track d) {
+                  <path [attr.d]="d" />
+                }
+              </svg>
+            </span>
+            <span class="svc-card__modality">{{ service.modality }}</span>
+          </header>
+
+          <h3 class="svc-card__title">{{ service.title }}</h3>
+          <p class="svc-card__text">{{ service.description }}</p>
+
+          <button
+            type="button"
+            (click)="agendar(service)"
+            [attr.aria-label]="service.ariaLabel"
+            class="svc-card__cta"
+          >
+            Agendar no WhatsApp
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </article>
+      }
+    </div>
   </div>
 
   <p class="mt-16 px-[4vw] text-center font-sans text-[0.72rem] text-stone tracking-[0.06em]">
