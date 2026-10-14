@@ -69,3 +69,24 @@
   mask-image: linear-gradient(to bottom, transparent 0%, #000 60%);
   pointer-events: none;
 }
+
+/* Mobile: a foto é mais baixa, então o desfoque da base tomava a figura por
+   inteiro e a sombra externa do card virava um borrão embaixo. Aqui o desfoque
+   encolhe pra perto da base e o card perde a sombra externa. */
+@media (max-width: 767px) {
+  .about-photo__blur {
+    height: 28%;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+  }
+
+  .about-photo__card {
+    box-shadow:
+      inset 0 1px 0 rgb(255 235 190 / 0.12),
+      inset 0 -1px 0 rgb(0 0 0 / 0.45);
+  }
+
+  .about-photo__img {
+    filter: blur(0.3px) drop-shadow(0 10px 14px rgb(8 6 3 / 0.4));
+  }
+}

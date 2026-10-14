@@ -1,64 +1,76 @@
-/* Carrossel horizontal de serviços (modo livre com scroll-snap) */
-.services-scroller {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-padding-left: 4vw;
-  -webkit-overflow-scrolling: touch;
-}
-
-.services-scroller::-webkit-scrollbar {
-  display: none;
-}
-
-/* Modo "pinned" (primeira visita): a seção fica presa e o scroll vertical move os cards. */
-.svc-pin {
+/* Serviços empilhando de baixo pra cima: cada card fica `sticky` num top que
+   aumenta com o índice, então o próximo sobe e cobre o de trás — deixando só a
+   "aba" (o topo) do anterior aparecendo. Sem JS: o scroll faz o trabalho. */
+.svc-stack {
+  --svc-step: 1.25rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+  padding-inline: 4vw;
 }
 
-.svc-pin.svc-locked {
-  height: calc(100svh + var(--svc-distance, 0px));
-}
-
-.svc-sticky {
-  position: relative;
-}
-
-.svc-pin.svc-locked .svc-sticky {
+.svc-card {
   position: sticky;
-  top: 0;
-  height: 100svh;
+  top: calc(6rem + var(--i, 0) * var(--svc-step));
+  display: flex;
+  flex-direction: column;
+  min-height: 20rem;
+  border-radius: 1.25rem;
+  /* Fundo opaco: o card da frente precisa cobrir o de trás por completo. */
+  background: linear-gradient(180deg, rgb(40 31 22 / 0.98) 0%, rgb(29 23 16 / 0.99) 58%, rgb(23 18 12 / 1) 100%);
+  border: 1px solid rgb(201 147 58 / 0.16);
+  padding: 1.5rem 1.75rem 1.75rem;
+  box-shadow:
+    inset 0 1px 0 rgb(255 235 190 / 0.08),
+    0 18px 38px -22px rgb(0 0 0 / 0.6);
+  transition: border-color 0.3s var(--ease-out);
+}
+
+.svc-card:hover {
+  border-color: rgb(201 147 58 / 0.4);
+}
+
+/* Fallback do índice (o `--i` também vem inline pelo template): garante o passo
+   do empilhamento mesmo sem o valor dinâmico. */
+.svc-card:nth-child(1) { --i: 0; }
+.svc-card:nth-child(2) { --i: 1; }
+.svc-card:nth-child(3) { --i: 2; }
+.svc-card:nth-child(4) { --i: 3; }
+.svc-card:nth-child(5) { --i: 4; }
+.svc-card:nth-child(6) { --i: 5; }
+.svc-card:nth-child(7) { --i: 6; }
+.svc-card:nth-child(8) { --i: 7; }
+.svc-card:nth-child(9) { --i: 8; }
+.svc-card:nth-child(10) { --i: 9; }
+.svc-card:nth-child(11) { --i: 10; }
+.svc-card:nth-child(12) { --i: 11; }
+
+.svc-card__head {
   display: flex;
   align-items: center;
-  overflow: hidden;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-/* No modo pinned o track cresce com o conteúdo e é transladado por JS. */
-.svc-track {
-  width: max-content;
-  will-change: transform;
+@media (min-width: 768px) {
+  .svc-stack {
+    --svc-step: 1.9rem;
+  }
+
+  .svc-card {
+    min-height: 21rem;
+    padding: 1.75rem 2rem 2rem;
+  }
 }
 
+/* Sem empilhamento quando o usuário reduz movimento. */
 @media (prefers-reduced-motion: reduce) {
-  .services-scroller {
-    scroll-behavior: auto;
-  }
-
-  /* Sem efeito pinned quando o usuário reduz movimento. */
-  .svc-pin.svc-locked {
-    height: auto;
-  }
-
-  .svc-pin.svc-locked .svc-sticky {
+  .svc-card {
     position: relative;
-    height: auto;
-    display: block;
-    overflow: visible;
-  }
-
-  .svc-track {
-    width: auto;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    will-change: auto;
+    top: auto;
   }
 }

@@ -1,15 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  ElementRef,
-  NgZone,
-  afterNextRender,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
-import { FadeInDirective } from '../../core/fade-in.directive';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { WhatsappService } from '../../core/whatsapp.service';
 
 interface Service {
@@ -20,11 +9,7 @@ interface Service {
   ariaLabel: string;
 }
 
-/** Marca (por sessão) que o efeito de scroll-lock já foi exibido uma vez. */
-const LOCK_SEEN_KEY = 'svc-lock-seen';
-
 @Component({
-  imports: [FadeInDirective],
   selector: 'app-services',
   styleUrl: './services.css',
   templateUrl: './services.html',
@@ -32,18 +17,12 @@ const LOCK_SEEN_KEY = 'svc-lock-seen';
 })
 export class Services {
   private readonly whatsapp = inject(WhatsappService);
-  private readonly zone = inject(NgZone);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly scroller = viewChild<ElementRef<HTMLElement>>('scroller');
-  private readonly pin = viewChild<ElementRef<HTMLElement>>('pin');
 
-  /** Ativo só na primeira visita: o scroll vertical empurra os cards na horizontal. */
-  protected readonly locked = signal(false);
-  protected readonly atStart = signal(true);
-  protected readonly atEnd = signal(false);
-
-  private maxTranslate = 0;
-
+  /**
+   * Cards "empilham" de baixo pra cima conforme o scroll: cada card é `sticky`
+   * num `top` um pouco maior que o anterior (ver services.css + `--i`), então o
+   * próximo sobe e cobre o de trás, deixando só a aba do topo visível.
+   */
   protected readonly services: Service[] = [
     {
       title: 'Consulta em Pneumologia',
@@ -96,156 +75,11 @@ export class Services {
     },
   ];
 
-  constructor() {
-    afterNextRender(() => {
-      this.init();
-      this.zone.runOutsideAngular(() => {
-        window.addEventListener('scroll', this.onWindowScroll, { passive: true });
-        window.addEventListener('resize', this.onWindowResize, { passive: true });
-      });
-    });
-
-    this.destroyRef.onDestroy(() => {
-      window.removeEventListener('scroll', this.onWindowScroll);
-      window.removeEventListener('resize', this.onWindowResize);
-    });
-  }
-
   protected pad(index: number): string {
     return String(index + 1).padStart(2, '0');
   }
 
-  /**
-   * Decide se a seção usa o efeito "pinned" (scroll vertical → cards na horizontal).
-   * Só acontece na primeira visita e se o carrossel realmente transbordar a tela.
-   */
-  private init(): void {
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-    const el = this.scroller()?.nativeElement;
-
-    if (reduce || this.lockSeen() || !el || el.scrollWidth <= window.innerWidth + 8) {
-      this.updateEdges();
-      return;
-    }
-
-    this.locked.set(true);
-    this.markLockSeen();
-    this.measure();
-
-    // Recalcula após o Angular aplicar a classe de pin (o pin passa a ter altura real).
-    requestAnimationFrame(() => {
-      this.measure();
-      this.onWindowScroll();
-    });
-  }
-
-  private measure(): void {
-    const el = this.scroller()?.nativeElement;
-    const pinEl = this.pin()?.nativeElement;
-    if (!el) return;
-
-    const viewport = document.documentElement.clientWidth;
-    this.maxTranslate = Math.max(0, this.contentWidth(el) - viewport);
-    pinEl?.style.setProperty('--svc-distance', `${this.maxTranslate}px`);
-  }
-
-  /** Largura total do conteúdo do carrossel, independente da largura do track. */
-  private contentWidth(el: HTMLElement): number {
-    const cards = el.querySelectorAll<HTMLElement>('[data-card]');
-    const gap = 20;
-    let width = gap * cards.length;
-    cards.forEach((card) => {
-      width += card.offsetWidth;
-    });
-
-    const styles = getComputedStyle(el);
-    const spacer = el.lastElementChild as HTMLElement | null;
-    width += parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight);
-    width += spacer?.offsetWidth ?? 0;
-    return width;
-  }
-
-  /** Scroll da janela: no modo pin, converte o avanço vertical em deslocamento horizontal. */
-  protected readonly onWindowScroll = (): void => {
-    if (!this.locked()) return;
-
-    const pinEl = this.pin()?.nativeElement;
-    const track = this.scroller()?.nativeElement;
-    if (!pinEl || !track) return;
-
-    const distance = pinEl.offsetHeight - window.innerHeight;
-    if (distance <= 0) return;
-
-    const scrolled = Math.min(Math.max(-pinEl.getBoundingClientRect().top, 0), distance);
-    const progress = scrolled / distance;
-
-    track.style.transform = `translate3d(${-progress * this.maxTranslate}px, 0, 0)`;
-    this.atStart.set(progress <= 0.001);
-    this.atEnd.set(progress >= 0.999);
-  };
-
-  protected readonly onWindowResize = (): void => {
-    if (!this.locked()) return;
-    this.measure();
-    this.onWindowScroll();
-  };
-
-  /** Rolagem interna (apenas no modo livre) para habilitar/desabilitar as setas. */
-  protected onScrollerScroll(): void {
-    if (this.locked()) return;
-    this.updateEdges();
-  }
-
-  /** Avança/recua um card (na horizontal no modo livre; na vertical no modo pin). */
-  protected scrollBy(direction: -1 | 1): void {
-    const el = this.scroller()?.nativeElement;
-    if (!el) return;
-
-    const card = el.querySelector<HTMLElement>('[data-card]');
-    const step = card ? card.offsetWidth + 20 : el.clientWidth * 0.8;
-
-    if (this.locked()) {
-      window.scrollBy({ top: step * direction, behavior: 'smooth' });
-      return;
-    }
-
-    el.scrollBy({ left: step * direction, behavior: 'smooth' });
-  }
-
-  protected onKeydown(event: KeyboardEvent): void {
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      this.scrollBy(1);
-    } else if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      this.scrollBy(-1);
-    }
-  }
-
   protected agendar(service: Service): void {
     this.whatsapp.open(service.message);
-  }
-
-  private updateEdges(): void {
-    const el = this.scroller()?.nativeElement;
-    if (!el) return;
-    this.atStart.set(el.scrollLeft <= 2);
-    this.atEnd.set(el.scrollLeft + el.clientWidth >= el.scrollWidth - 2);
-  }
-
-  private lockSeen(): boolean {
-    try {
-      return sessionStorage.getItem(LOCK_SEEN_KEY) === '1';
-    } catch {
-      return false;
-    }
-  }
-
-  private markLockSeen(): void {
-    try {
-      sessionStorage.setItem(LOCK_SEEN_KEY, '1');
-    } catch {
-      /* sessionStorage indisponível — ignora */
-    }
   }
 }

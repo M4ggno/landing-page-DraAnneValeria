@@ -61,6 +61,26 @@
   pointer-events: none;
 }
 
+/* Mobile: mesma correção do "Sobre" — desfoque menor pra não cobrir a figura e
+   card sem sombra externa. */
+@media (max-width: 767px) {
+  .faq-photo__blur {
+    height: 28%;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+  }
+
+  .faq-photo__card {
+    box-shadow:
+      inset 0 1px 0 rgb(255 235 190 / 0.12),
+      inset 0 -1px 0 rgb(0 0 0 / 0.45);
+  }
+
+  .faq-photo__img {
+    filter: blur(0.3px) drop-shadow(0 10px 14px rgb(8 6 3 / 0.4));
+  }
+}
+
 /* Drop-down do FAQ: altura animada via grid-template-rows (0fr → 1fr) */
 .faq-panel {
   display: grid;
