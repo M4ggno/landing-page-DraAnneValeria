@@ -97,10 +97,18 @@ export const FAQS: FaqEntry[] = [
   },
 ];
 
-/** Remove barra final e garante protocolo. Retorna '' se não houver URL. */
+/**
+ * Remove barra final e garante protocolo. Retorna '' se não houver URL.
+ *
+ * Rejeita valores com caracteres que não existem numa URL e que quebrariam o markup
+ * onde ela é interpolada (canonical, og:url, sitemap.xml, robots.txt): espaços, aspas,
+ * `<`, `>`, crase e barra invertida.
+ */
 export function normalizeSiteUrl(url: string | undefined | null): string {
   if (!url) return '';
-  const withProtocol = /^https?:\/\//.test(url) ? url : `https://${url}`;
+  const trimmed = url.trim();
+  if (!trimmed || /[\s<>"'`\\]/.test(trimmed)) return '';
+  const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
   return withProtocol.replace(/\/+$/, '');
 }
 
@@ -190,7 +198,7 @@ export function renderSeoHead(siteUrl: string): string {
     const key = tag.property ? `property="${tag.property}"` : `name="${tag.name}"`;
     lines.push(`<meta ${key} content="${escapeAttr(tag.content ?? '')}">`);
   }
-  if (siteUrl) lines.push(`<link rel="canonical" href="${siteUrl}/">`);
+  if (siteUrl) lines.push(`<link rel="canonical" href="${escapeAttr(siteUrl)}/">`);
   const json = JSON.stringify(seoJsonLd(siteUrl), null, 2).replace(/</g, '\\u003c');
   lines.push(`<script type="application/ld+json">\n${json}\n</script>`);
   const faqJson = JSON.stringify(seoFaqJsonLd(), null, 2).replace(/</g, '\\u003c');

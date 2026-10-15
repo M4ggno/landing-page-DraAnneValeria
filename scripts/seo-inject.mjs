@@ -11,6 +11,15 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const seoSource = join(root, 'src/app/core/seo.ts');
 const indexPath = join(root, 'dist/drAnnaValeria/browser/index.html');
 
+/** Escapa texto para conteúdo XML (usado no sitemap.xml). */
+const escapeXml = (value) =>
+  value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+
 // Transpila seo.ts on-the-fly (funciona em qualquer versão de Node, sem depender de type-stripping)
 const { outputText } = ts.transpileModule(await readFile(seoSource, 'utf8'), {
   compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
@@ -45,7 +54,7 @@ if (siteUrl) {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>${siteUrl}/</loc>
+    <loc>${escapeXml(siteUrl)}/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
