@@ -34,11 +34,10 @@
 }
 
 .faq-photo__img {
-  /* A silhueta já vem com borda macia no arquivo; aqui só esfumacamos a base.
-     drop-shadow segue o contorno macio e dá o relevo da figura sobre o card. */
-  filter: blur(0.3px) drop-shadow(0 18px 22px rgb(8 6 3 / 0.5));
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+  /* Nada de `filter`/`mask-image` no <img>: em celulares retina o navegador
+     rasteriza um <img> filtrado/mascarado numa camada em 1x e depois amplia
+     pelo devicePixelRatio — a foto fica embaçada só no aparelho. A base
+     esfumaçada já vem assada no alfa do próprio arquivo. */
 }
 
 /* Vinheta lateral: afoga suavemente as laterais (onde o recorte é "seco") no fundo */
@@ -52,32 +51,20 @@
 .faq-photo__blur {
   position: absolute;
   inset: auto 0 0 0;
-  height: 45%;
-  background: linear-gradient(to bottom, rgb(35 28 20 / 0) 0%, var(--color-dark-warm) 85%);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 60%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 60%);
+  height: 32%;
+  /* Véu leve da cor da seção sobre a base (sem backdrop-filter e sem mask): só
+     ajuda a fundir o fim do card no fundo. A foto, que já tem o alfa assado,
+     aparece nítida em telas retina. */
+  background: linear-gradient(to bottom, rgb(35 28 20 / 0) 0%, rgb(35 28 20 / 0.9) 100%);
   pointer-events: none;
 }
 
-/* Mobile: mesma correção do "Sobre" — desfoque menor pra não cobrir a figura e
-   card sem sombra externa. */
+/* Mobile: mesma correção do "Sobre" — card sem sombra externa. */
 @media (max-width: 767px) {
-  .faq-photo__blur {
-    height: 28%;
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
-  }
-
   .faq-photo__card {
     box-shadow:
       inset 0 1px 0 rgb(255 235 190 / 0.12),
       inset 0 -1px 0 rgb(0 0 0 / 0.45);
-  }
-
-  .faq-photo__img {
-    filter: blur(0.3px) drop-shadow(0 10px 14px rgb(8 6 3 / 0.4));
   }
 }
 
