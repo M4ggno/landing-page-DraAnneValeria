@@ -11,10 +11,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
 
-  <!-- ── Google Fonts ─────────────────────────────────────────────────────── -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <!-- ── Fontes (self-hosted em /fonts/, declaradas em src/styles.css) ──────── -->
+  <link rel="preload" href="fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- Imagem principal do hero: começa a baixar antes do Angular inicializar (melhora o LCP) -->
   <link rel="preload" as="image" href="photos/photo1.webp" type="image/webp" fetchpriority="high">
