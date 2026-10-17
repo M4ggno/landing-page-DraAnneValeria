@@ -88,7 +88,7 @@ export const FAQS: FaqEntry[] = [
   {
     question: 'Em quais cidades há atendimento presencial?',
     answer:
-      'Patos (PB — CLINAP), Sousa (PB — Instituto YSO), Pombal (PB — Núcleo Vida), Caicó (RN — Clinical Center), Afogados da Ingazeira (PE) e unidades na Bahia.',
+      "Patos (PB — CLINAP), Sousa (PB — Instituto YSO), Pombal (PB — Clínica D'Posture), Caicó (RN — Clínica Santana), Afogados da Ingazeira (PE — Clinical Center) e Bahia (Nucleovida).",
   },
   {
     question: 'Qual o horário de atendimento da equipe?',

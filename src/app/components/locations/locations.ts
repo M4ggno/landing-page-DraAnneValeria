@@ -48,13 +48,28 @@ export class Locations {
       clinic: 'Instituto YSO — Av. João Bôsco M. de Souza',
       query: 'Instituto YSO Sousa PB',
     },
-    { city: 'Pombal', state: 'PB', clinic: 'Núcleo Vida', query: 'Núcleo Vida Pombal PB' },
-    { city: 'Caicó', state: 'RN', clinic: 'Clinical Center', query: 'Clinical Center Caicó RN' },
-    { city: 'Afogados da Ingazeira', state: 'PE', clinic: 'Atendimento presencial' },
+    {
+      city: 'Pombal',
+      state: 'PB',
+      clinic: "Clínica D'Posture",
+      query: "Clínica D'Posture Pombal PB",
+    },
+    {
+      city: 'Caicó',
+      state: 'RN',
+      clinic: 'Clínica Santana',
+      query: 'Clínica Santana Caicó RN',
+    },
+    {
+      city: 'Afogados da Ingazeira',
+      state: 'PE',
+      clinic: 'Clinical Center',
+      query: 'Clinical Center Afogados da Ingazeira PE',
+    },
     {
       city: 'Bahia',
       state: 'BA',
-      clinic: 'Atendimento presencial',
+      clinic: 'Nucleovida',
       query: '-9.398199,-38.225540',
     },
   ];
